@@ -1,0 +1,18 @@
+[% META title = 'Orders Page' -%]
+
+<p>Current Orders: </p>
+<table>
+    <thead>
+        <tr><th>State</th><th>Count</th></tr>
+    </thead>
+    <tbody>
+    [% FOREACH state IN states %]
+        <tr>
+            <td>[% state %]</td>
+            <td>
+        <a href="[% c.uri_for(c.controller.action_for('list_by_state'), [state]) %]">Show</a>
+            </td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>

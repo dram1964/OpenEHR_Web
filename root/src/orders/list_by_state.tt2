@@ -1,0 +1,6 @@
+[% META title = 'Orders by State Code' %]
+<ol>
+[% FOREACH composition IN compositions %]
+<li>UID: [% composition.composition_uid %]</li>
+[% END %]
+</ol>

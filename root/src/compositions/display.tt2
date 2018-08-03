@@ -1,0 +1,103 @@
+[% USE Dumper(Indent=1) -%]
+
+[% META title = 'Composition Display' -%]
+<ol>
+    [% FOREACH key IN composition.keys %]
+    <li>[% key %]</li>
+    [% END %]
+</ol>
+
+[% IF composition.laboratory_result_report %]
+    [% lab_report = composition.laboratory_result_report %]
+    <p>We've got a lab report!</p>
+    <table>
+        <thead>
+            <caption> Composition Data</caption>
+            <tr><th>EHR Id</th><th>Patient Number</th><th>Composition UID</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>[% ehrid %]</td><td>[% ptnumber %]</td><td>[% uid %]</td></tr>
+        </tbody>
+    </table>
+    [% FOREACH territory IN lab_report.territory %]
+        <table>
+            <thead>
+                <caption>Territory Data</caption>
+                <tr><th>Key</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+            [% FOREACH key IN territory.keys %]
+                <tr><td>[% key %]</td><td>[% territory.$key %]</td></tr>
+            [% END %]
+            </tbody>
+        </table>
+    [% END %]
+        
+    <caption>Laboratory Test Context</caption>
+    [% FOREACH lab_test IN lab_report.laboratory_test %]
+    [% languages = lab_test.language %]
+    [% clinical = lab_test.clinical_information_provided.0 %]
+    [% submit_time = lab_test.time.0 %]
+    [% lab_name = lab_test.responsible_laboratory.0 %]
+    [% requested_tests = lab_test.requested_test %]
+    [% placer_order = lab_test.test_request_details.0.placer_order_number.0 %]
+    [% requester = lab_test.test_request_details.0.requester.0.professional_identifier.0 %]
+    [% requester_location = lab_test.test_request_details.0.requester.0.ordering_provider.0.ordering_provider.0 %]
+    [% filler_details = lab_test.test_request_details.0.filler_order_number.0 %]
+    [% test_status = lab_test.test_status.0 %]
+    [% test_status_timestamp = lab_test.test_status_timestamp.0 %]
+    [% specimen = lab_test.specimen.0 %]
+            <table>
+                <thead>
+                    <caption>Lab Test Context Data</caption>
+                    <tr><th>Key</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+        [% FOREACH language IN languages %]
+                [% FOREACH key IN language.keys %]
+                    <tr><td>[% key %]</td><td>[% language.$key %]</td></tr>
+                [% END %]
+        [% END %]
+                    <tr><td>Clinical Information</td><td>[% clinical %]</td></tr>
+                    <tr><td>Report Sumitted</td><td>[% submit_time %]</td></tr>
+                    <tr><td>Test Status</td><td>[% test_status.values.join(' - ') %]</td></tr>
+                    <tr><td>Responsible Lab - Name of Organisation</td><td>[% lab_name.name_of_organisation.0 %]</td></tr>
+                    [% FOREACH requested_test IN requested_tests %]
+                    <tr><td>Requested Test</td><td>[% requested_test.values.join(' - ') %]</td></tr>
+                    [% END %]
+                    <tr><td>Placer Order Details</td><td>[% placer_order.values.join(' - ') %]</td></tr>
+                    <tr><td>Requester Details</td><td>[% requester.values.join(' - ') %]</td></tr>
+                    <tr><td>Requester Location</td><td>[% requester_location.family_name.0 %] - [% requester_location.given_name.0 %] </td></tr>
+                    <tr><td>Filler Details</td><td>[% filler_details.values.join(' - ') %]</td></tr>
+                    <tr><td>Test Status</td><td>[% test_status.values.join(' - ') %] at [% test_status_timestamp %]</td></tr>
+                    <tr><td>Specimen ID</td><td>[% specimen.processing.0.laboratory_specimen_identifier.0.values.join(' - ') %]</td></tr>
+                    <tr><td>Specimen Type</td><td>[% specimen.specimen_type.0 %]</td></tr>
+                    <tr><td>Specimen Collection</td><td>[% specimen.collection_method.0 %]</td></tr>
+                    <tr><td>Collection Date</td><td>[% specimen.datetime_collected.0 %]</td></tr>
+                    <tr><td>Received Date</td><td>[% specimen.processing.0.datetime_received.0 %]</td></tr>
+                </tbody>
+            </table>
+    [% END %]
+        
+    [% panels = lab_test.laboratory_test_panel %]
+            <table>
+                <thead>
+                    <caption>Lab Test Data</caption>
+                    <tr><th>Key</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+    [% FOREACH panel IN panels %]
+        [% results = panel.laboratory_result %]
+        [% FOREACH result IN results %]
+[% Dumper.dump(result.result_value.0) %]
+	    [% FOREACH key_name IN $result.result_value.0.keys %]
+[% Dumper.dump(key_name) %]
+            [% END %]
+	<p>[% result.result_value.0.text_value.0 %]</p>
+        [% END %]
+                </tbody>
+            </table>
+    [% END %]
+[% END %]
+
+[% Dumper.dump(composition) %]

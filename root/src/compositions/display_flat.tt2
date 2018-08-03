@@ -1,0 +1,18 @@
+[% USE Dumper(Indent=1) -%]
+
+[% META title = 'Composition Display' -%]
+<table>
+    <thead>
+        <caption> Composition Data</caption>
+        <tr><th>EHR Id</th><th>Patient Number</th><th>Composition UID</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>[% ehrid %]</td><td>[% ptnumber %]</td><td>[% uid %]</td></tr>
+    </tbody>
+</table>
+<table>
+    <tr><th>Key</th><th>Value</th></tr>
+    [% FOREACH key IN composition.keys.sort %]
+    <tr><td>[% key %]</td><td>[% composition.$key %]</td></tr>
+    [% END %]
+</table>

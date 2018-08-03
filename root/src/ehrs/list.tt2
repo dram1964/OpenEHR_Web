@@ -1,0 +1,20 @@
+[% # This is a TT comment. -%]
+
+[% META title = 'Ehr List' -%]
+
+<table>
+<tr><th>EhrID</th><th>Hospital Number</th><th>Number Type</th><th>Composition Type</th><th>UID</th></tr>
+
+[% FOREACH ehr IN ehrs -%]
+<tr>
+    <td>[% ehr.ehrid %]</td>
+    <td>[% ehr.ptnumber %]</td>
+    <td>[% ehr.namespace %]</td>
+    <td>[% ehr.composition_type %]</td>
+    <td>
+	<a href="[% c.uri_for(c.controller('Compositions').action_for('display'), [ehr.ehrid, ehr.ptnumber, ehr.uid]) %]">Display [% ehr.uid %] </a></td>
+    <td>
+	<a href="[% c.uri_for(c.controller('Compositions').action_for('display_flat'), [ehr.ehrid, ehr.ptnumber, ehr.uid]) %]">Display FLAT </a></td>
+</tr>
+[% END -%]
+</table>
