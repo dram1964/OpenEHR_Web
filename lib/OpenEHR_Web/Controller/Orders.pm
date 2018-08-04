@@ -44,40 +44,12 @@ sub list :Path :Args(0) {
 
 sub list_by_state :Path :Args(1) {
     my ( $self, $c, $state ) = @_;
-    my $aql_info_orders = << "END_AQL";
-    select
-    e/ehr_id/value as subject_ehr_id,
-    e/ehr_status/subject/external_ref/namespace as subject_id_type,
-    e/ehr_status/subject/external_ref/id/value as subject_id,
-    c/uid/value as composition_uid,
-    i/narrative/value as narrative,
-    c/name/value as order_type,
-    c/composer/name as ordered_by,
-    i/uid/value as order_id,
-    i/protocol[at0008]/items[at0010]/value/value as unique_message_id,
-    i/activities[at0001]/timing/value as start_date,
-    i/expiry_time/value as end_date,
-    c/context/start_time/value as data_start_date,
-    c/context/end_time/value as data_end_date,
-    i/activities[at0001]/description[at0009]/items[at0148]/value/value as service_type,
-    a/ism_transition/current_state/value as current_state,
-    a/ism_transition/current_state/defining_code/code_string as current_state_code
-    from EHR e
-    contains COMPOSITION c[openEHR-EHR-COMPOSITION.report.v1]
-    contains (INSTRUCTION i[openEHR-EHR-INSTRUCTION.request.v0]
-    and ACTION a[openEHR-EHR-ACTION.service.v0])
-    where i/activities[at0001]/description[at0009]/items[at0121]/value = 'GEL Information data request'
-    and i/activities[at0001]/description[at0009]/items[at0148]/value/value = 'pathology'
-    and a/ism_transition/current_state/value = '$state'
-END_AQL
     my $query = OpenEHR::REST::AQL->new();
-    $query->statement($aql_info_orders);
-    $query->run_query;
+    $query->find_orders_by_state($state);
     if ( $query->response_code eq '204') {
         $c->stash->{error_msg} = "No $state orders found";
     }
     elsif ( $query->err_msg ) {
-        $c->log->debug("Query: " . $aql_info_orders );
         $c->stash->{error_msg} = $query->err_msg;
     }
     elsif (defined($query->resultset)) {

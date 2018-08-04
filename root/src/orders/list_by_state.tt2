@@ -1,6 +1,20 @@
 [% META title = 'Orders by State Code' %]
-<ol>
+[% USE date %]
+<a href="[% c.uri_for(c.controller.action_for(display)) %]">All Orders</a>
+<table>
+  <thead>
+    <tr><th>Service Type</th><th>Order ID</th><th>Order Date</th><th>Order Expiry</th><th>View Order</th></tr>
+  </thead>
+  <tbody>
 [% FOREACH composition IN compositions %]
-<li>UID: [% composition.composition_uid %]</li>
+    <tr>
+      <td>[% composition.service_type %]</td>
+      <td>[% composition.order_id %]</td>
+      <td>[% composition.start_date.substr(0,10) %]</td>
+      <td>[% composition.end_date.substr(0,10) %]</td>
+      <td><a href="[% c.uri_for(c.controller('Compositions').action_for('display_flat'), 
+            [composition.subject_ehr_id, composition.subject_id, composition.composition_uid]) %]">
+        [% composition.order_type %]</td>
+    </tr>
 [% END %]
 </ol>

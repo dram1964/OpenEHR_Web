@@ -1,6 +1,6 @@
 [% META title = 'Orders Page' -%]
 
-<p>Current Orders: </p>
+<p>All Orders: </p>
 <table>
     <thead>
         <tr><th>State</th><th>Count</th></tr>

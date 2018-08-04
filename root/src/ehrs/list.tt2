@@ -12,7 +12,7 @@
     <td>[% ehr.namespace %]</td>
     <td>[% ehr.composition_type %]</td>
     <td>
-	<a href="[% c.uri_for(c.controller('Compositions').action_for('display'), [ehr.ehrid, ehr.ptnumber, ehr.uid]) %]">Display [% ehr.uid %] </a></td>
+	<a href="[% c.uri_for(c.controller('Compositions').action_for('display'), [ehr.ehrid, ehr.ptnumber, ehr.uid]) %]">Display STRUCTURED </a></td>
     <td>
 	<a href="[% c.uri_for(c.controller('Compositions').action_for('display_flat'), [ehr.ehrid, ehr.ptnumber, ehr.uid]) %]">Display FLAT </a></td>
 </tr>
