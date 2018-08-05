@@ -1,5 +1,10 @@
 [% META title = 'Orders Page' -%]
 
+<form method="post" action="[% c.uri_for('search_by_uid') %]">
+<input type="text" name="uid" value="uid">
+<input type="submit" name="submit" value="submit">
+</form>
+
 <p>All Orders: </p>
 <table>
     <thead>

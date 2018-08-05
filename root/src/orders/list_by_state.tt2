@@ -1,5 +1,4 @@
 [% META title = 'Orders by State Code' %]
-[% USE date %]
 <a href="[% c.uri_for(c.controller.action_for(display)) %]">All Orders</a>
 <table>
   <thead>

@@ -61,6 +61,20 @@ sub list_by_state :Path :Args(1) {
     );
 }
 
+sub search_by_uid :Path('search_by_uid') :Args(0) {
+    my ($self, $c) = @_;
+    my $uid = $c->request->params->{uid};
+
+    my $query = OpenEHR::REST::AQL->new();
+    $query->find_ehr_by_uid($uid);
+
+
+    my $ehrid = $query->resultset->[0]->{ehrid};
+    my $ptnumber = $query->resultset->[0]->{ptnumber};
+
+    $c->forward($c->controller('Compositions'), 'display_flat', [$ehrid, $ptnumber, $uid]);
+}
+
 
 
 

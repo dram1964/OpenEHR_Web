@@ -56,8 +56,8 @@ sub display_flat :Local :Args(3) {
         $c->stash->{error_msg} = $query->err_msg;
     }
     my $json_string = to_json($query->composition_response);
-    $c->log->debug($json_string);
-    $json_string =~ s/'_name'/'name'/;
+    #$c->log->debug($json_string);
+    #$json_string =~ s/'_name'/'name'/;
     my $composition = from_json($json_string);
     $c->stash(
         composition => $query->composition_response,
