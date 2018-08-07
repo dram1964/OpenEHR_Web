@@ -58,6 +58,36 @@ END_STMT
     $c->stash(template => 'ehrs/list.tt2');
 }
 
+=head2 search_by_subject_id
+
+Fetch an Ehr and its compostions for display
+
+=cut
+
+sub search_by_subject_id :Path('search_by_subject_id') :Args(0) {
+    my ( $self, $c ) = @_;
+    my $subject_id = $c->request->params->{subject_id};
+    my $stmt = << "END_STMT";
+    select e/ehr_id/value as ehrid, e/ehr_status/subject/external_ref/id/value as ptnumber,
+    e/ehr_status/subject/external_ref/namespace as namespace, c/name/value as composition_type,
+    c/uid/value as uid
+    from EHR e
+    contains Composition c
+    where e/ehr_status/subject/external_ref/id/value = '$subject_id'
+END_STMT
+    $c->log->debug($stmt);
+    my $query = OpenEHR::REST::AQL->new();
+    $query->statement($stmt);
+    $query->run_query;
+    if ($query->err_msg) {
+        $c->stash->{error_msg} = $query->err_msg;
+    }
+
+    $c->stash(ehr => $query->resultset);
+    $c->stash(template => 'ehrs/list_by_subject.tt2');
+}
+
+
 =encoding utf8
 
 =head1 AUTHOR

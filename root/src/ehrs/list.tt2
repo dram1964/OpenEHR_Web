@@ -2,6 +2,12 @@
 
 [% META title = 'Ehr List' -%]
 
+<form method="post" action="[% c.uri_for('search_by_subject_id') %]">
+<label for="subject_id">Search by Subject ID</label>
+<input type="text" name="subject_id">
+<input type="submit" name="submit" value="submit">
+</form>
+
 <table>
 <tr><th>EhrID</th><th>Hospital Number</th><th>Number Type</th><th>Composition Type</th><th>UID</th></tr>
 

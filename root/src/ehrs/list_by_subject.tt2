@@ -1,0 +1,28 @@
+[% # This is a TT comment. -%]
+
+[% META title = 'Ehr Compositions' -%]
+<p>Compositions for Ehr([% ehr.0.ehrid %]). (Subject ID: [% ehr.0.ptnumber %])</p>
+
+<table>
+<tr>
+    <th>Composition Type</th>
+    <th>UID</th>
+    <th>Display</th>
+    <th>View on Server</th>
+</tr>
+
+[% FOREACH compos IN ehr -%]
+<tr>
+    <td>[% compos.composition_type %]</td>
+    <td>[% compos.uid %]</td>
+    <td><a href="[% c.uri_for(c.controller('Compositions').action_for('display_flat'), 
+        [compos.ehrid, compos.ptnumber, compos.uid]) %]">FLAT </a><br>
+        <a href="[% c.uri_for(c.controller('Compositions').action_for('display'), 
+        [compos.ehrid, compos.ptnumber, compos.uid]) %]">STRUCTURED </a>
+    </td>
+    <td>
+        <a target="_blank" href="[% c.config.base_path %]composition/[% c.config.test_uid %]">Server</a>
+    </td>
+</tr>
+[% END -%]
+</table>

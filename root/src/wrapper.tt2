@@ -18,9 +18,10 @@
  
 <div id="bodyblock">
 <div id="menu">
-    Navigation:
     <ul>
+        <li>Navigation:</li>
         <li><a href="[% c.uri_for('/ehrs/list') %]">EHRs</a></li>
+        <li><a href="[% c.uri_for('/compositions/list') %]">Compositions</a></li>
         <li><a href="[% c.uri_for(c.controller('Orders').action_for('list')) %]">Orders</a></li>
     </ul>
 </div><!-- end menu -->

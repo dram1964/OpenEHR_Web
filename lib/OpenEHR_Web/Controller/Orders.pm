@@ -33,7 +33,7 @@ Shows a welcome page for Orders
 
 =cut 
 
-sub list :Path :Args(0) {
+sub list :Path('list') :Args(0) {
     my ( $self, $c ) = @_;
     my $states = [ qw/ planned scheduled completed aborted / ];
     $c->stash(
@@ -42,7 +42,7 @@ sub list :Path :Args(0) {
     );
 }
 
-sub list_by_state :Path :Args(1) {
+sub list_by_state :Path('list_by_state') :Args(1) {
     my ( $self, $c, $state ) = @_;
     my $query = OpenEHR::REST::AQL->new();
     $query->find_orders_by_state($state);

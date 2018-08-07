@@ -100,4 +100,4 @@
     [% END %]
 [% END %]
 
-[% Dumper.dump(composition) %]
+<pre>[% Dumper.dump(composition) %]</pre>

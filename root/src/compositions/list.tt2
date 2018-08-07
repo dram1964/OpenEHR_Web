@@ -1,0 +1,25 @@
+[% META title = 'Composition List' -%]
+
+<form method="post" action="[% c.uri_for('search_by_uid') %]">
+<label for="uid">Search by Composition UID</label>
+<input type="text" name="uid" value="[% c.config.test_uid %]">
+<input type="submit" name="submit" value="submit">
+</form>
+
+<table>
+<tr><th>UID</th><th>Name</th><th>Submitted</th><th>Template</th><th>Report ID</th></tr>
+
+[% FOREACH composition IN compositions -%]
+<tr>
+    <td>[% composition.uid %]</td>
+    <td>[% composition.name %]</td>
+    <td>[% composition.submitted.substr(0,10) %]</td>
+    <td>[% composition.template_id %]</td>
+    <td>[% composition.report_id %]</td>
+    <td>
+	<a href="[% c.uri_for(c.controller.action_for('display'), [composition.ehrid, composition.ptnumber, composition.uid]) %]">Display STRUCTURED </a></td>
+    <td>
+	<a href="[% c.uri_for(c.controller.action_for('display_flat'), [composition.ehrid, composition.ptnumber, composition.uid]) %]">Display FLAT </a></td>
+</tr>
+[% END -%]
+</table>
