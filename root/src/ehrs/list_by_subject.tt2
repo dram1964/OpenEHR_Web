@@ -7,6 +7,7 @@
 <tr>
     <th>Composition Type</th>
     <th>UID</th>
+    <th>Submitted</th>
     <th>Display</th>
     <th>View on Server</th>
 </tr>
@@ -15,6 +16,7 @@
 <tr>
     <td>[% compos.composition_type %]</td>
     <td>[% compos.uid %]</td>
+    <td>[% compos.submitted.substr(0,10) %]</td>
     <td><a href="[% c.uri_for(c.controller('Compositions').action_for('display_flat'), 
         [compos.ehrid, compos.ptnumber, compos.uid]) %]">FLAT </a><br>
         <a href="[% c.uri_for(c.controller('Compositions').action_for('display'), 

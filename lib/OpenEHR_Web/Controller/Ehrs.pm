@@ -70,7 +70,7 @@ sub search_by_subject_id :Path('search_by_subject_id') :Args(0) {
     my $stmt = << "END_STMT";
     select e/ehr_id/value as ehrid, e/ehr_status/subject/external_ref/id/value as ptnumber,
     e/ehr_status/subject/external_ref/namespace as namespace, c/name/value as composition_type,
-    c/uid/value as uid
+    c/uid/value as uid, c/context/start_time/value as submitted
     from EHR e
     contains Composition c
     where e/ehr_status/subject/external_ref/id/value = '$subject_id'
