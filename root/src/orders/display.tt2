@@ -21,3 +21,20 @@
     [% END %]
     </tbody>
 </table>
+<table>
+  <thead>
+    <tr><th>Composition UID</th><th>Start Date</th><th>End Date</th><th>Service Type</th><th>Current State</th></tr>
+  </thead>
+  <tbody>
+  [% FOREACH order IN orders %]
+    <tr>
+      <td>[% order.compositionid %]</td>
+      <td>[% order.request_start_date.substr(0,10) %]</td>
+      <td>[% order.request_end_date.substr(0,10) %]</td>
+      <td>[% order.service_type %]</td>
+      <td>[% order.current_state_code %]</td>
+    </tr>
+  [% END %]
+  </tbody>
+</table>
+

@@ -35,7 +35,33 @@ Shows a welcome page for Orders
 
 sub list :Path('list') :Args(0) {
     my ( $self, $c ) = @_;
-    my $states = [ qw/ planned scheduled completed aborted / ];
+    my $states = [ qw/ planned scheduled complete aborted / ];
+    my $stmt = << "END_STMT";
+select a/uid/value as compositionid, 
+    c/narrative/value as narrative, 
+    c/uid/value as requestid, 
+    c/protocol[at0008]/items[at0010]/value/value as uniquemessageid, 
+    f/items[at0001]/value/value as request_start_date, 
+    f/items[at0002]/value/value as request_end_date,  
+    d/ism_transition/current_state/value as current_state,c/activities[at0001]/description[at0009]/items[at0148]/value/value as service_type,
+    d/ism_transition/current_state/defining_code/code_string as current_state_code, 
+    e/ehr_status/subject/external_ref/id/value as nhsnumber
+    from EHR e 
+    contains COMPOSITION a[openEHR-EHR-COMPOSITION.report.v1]
+    contains (INSTRUCTION c[openEHR-EHR-INSTRUCTION.request.v0]
+    contains CLUSTER f[openEHR-EHR-CLUSTER.information_request_details_gel.v0]
+    AND ACTION d[openEHR-EHR-ACTION.service.v0])
+    where c/activities[at0001]/description[at0009]/items[at0121]/value = 'GEL Information data request'
+END_STMT
+    my $query = OpenEHR::REST::AQL->new();
+    $query->statement($stmt);
+    $query->run_query;
+    if ($query->err_msg) {
+        $c->stash->{error_msg} = $query->err_msg;
+    }
+
+    $c->stash(orders => $query->resultset);
+
     $c->stash(
         states  => $states,
         template => 'orders/display.tt2',
